@@ -13,24 +13,24 @@
       context = mycanvas.getContext("2d");
     }
     var types = new Array(
-      "source-over",
-      "source-in",
-      "source-out",
-      "source-atop",
-      "destination-over",
-      "destination-in",
-      "destination-out",
-      "destination-atop",
-      "lighter",
-      "copy",
-      "xor"
+      "source-over",       //新图形直接覆盖在上面
+      "source-in",         //重叠的地方，颜色为新图形颜色
+      "source-out",        //新图形去掉原来有内容的位置，颜色为新图形颜色
+      "source-atop",       //在原来内容上，与新图形重叠的位置颜色为新图形颜色
+      "destination-over",  //原来覆盖新图形
+      "destination-in",    //重叠的地方，颜色为原来内容颜色
+      "destination-out",   //原来内容去掉新图形的位置，颜色为原来银色
+      "destination-atop",  //在新图形上，与原来内容重叠的位置颜色为原来内容的颜色
+      "lighter",           //重叠部分的颜色是通过颜色值相加来确定的。
+      "copy",              //只显示新图形
+      "xor"                //重叠部分的颜色是透明的
     )
     var i = 9;
     context.fillStyle = "blue";
     context.fillRect(20,20,200,100);
     context.globalCompositeOperation = types[i];
     context.beginPath();
-    context.fillRect = "red";
+    context.fillStyle = "red";
     context.arc(75,100,20,0,Math.PI*2,true);
     context.closePath();
     context.fill();
