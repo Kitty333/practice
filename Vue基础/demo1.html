@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>vue显示切换和属性绑定</title>
+</head>
+<style>
+  .box{
+    width: 100px;
+    height: 100px;
+    background-color: brown;
+  }
+  .active{
+    border: 1px solid seagreen;
+  }
+</style>
+<body>
+  <!-- v-show:显示和隐藏相当于display -->
+  <div id="app">
+    <div class="box" v-show="isShow"></div>
+    <button @click="change">v-show显示/隐藏</button>
+  </div>
+
+  <!-- v-if:操作的是dom树，标签直接移除 -->
+  <div id="app1">
+    <div class="box" v-if="isShow"></div>
+    <button @click="show">v-if显示和隐藏</button>
+  </div>
+
+  <!-- v-bind:设置元素的属性（title，id，class） -->
+  <!-- 利用active给标签添加样式 -->
+  <div id="app2">
+    <div class="box"  @click="toggle" :title="divTitle"></div>
+  </div>
+  <div id="app3">
+    <img width="150px" src="./img/1.jpg" alt="haha" :class="isActive?'active':''" @click="toggle" >
+  </div>
+
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+  var app = new Vue({
+    el:"#app",
+    data:{
+      isShow:false
+    },
+    methods:{
+      change:function(){
+        this.isShow = !this.isShow;
+      } 
+    }
+  })
+
+  var app1 = new Vue({
+    el:"#app1",
+    data:{
+      isShow:false
+    },
+    methods:{
+      show:function(){
+        this.isShow = !this.isShow
+      }
+    }
+  })
+
+  var app2 = new Vue({
+    el:"#app2",
+    data:{
+      divTitle:"HELLO",
+    },
+  })
+
+  var app3 = new Vue({
+    el:"#app3",
+    data:{
+      isActive:false
+    },
+    methods:{
+      toggle:function(){
+        this.isActive = !this.isActive
+      }
+    }
+  })
+
+
+</script>
+</html>
