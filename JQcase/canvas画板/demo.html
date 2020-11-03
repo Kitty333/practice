@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>canvas画板</title>
+  <link rel="stylesheet" href="demo.css">
+</head>
+<style>
+  canvas{
+    border: 1px solid #000;
+  }
+</style>
+<body>
+  <div class="wrapper">
+    <canvas id="mycanvas" width="700" height="400"></canvas>
+    <ul class="btn-list">
+      <li><input type="color" value="colorBoard" id="colorchange"></li>
+      <li><input type="button" value="清屏" id="clear"></li>
+      <li><input type="button" value="橡皮" id="eraser"></li>
+      <li><input type="button" value="撤销" id="rescind" ></li>
+      <li><input type="range" value="线条粗细" min="1" max="30" id="lineW"></li>
+    </ul>
+  </div>  
+    
+  <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.0/jquery.js"></script>
+  <script>
+    /* var mycanvas = document.getElementById("mycanvas");
+    var ctx = mycanvas.getContext("2d");//相当于画笔
+    ctx.moveTo(100,100);//当前点
+    ctx.lineTo(200,100);//从当前点绘制到XY
+    ctx.lineTo(200,200);
+    ctx.strokeStyle="#ff0000";
+    ctx.lineWidth = 20;//行宽
+    ctx.closePath();//自动闭合路径
+    ctx.stroke();//描边
+    //获取画的图片的数据
+    var img = ctx.getImageData(70,70,160,160);
+    //然后复制到相应的位置
+    ctx.putImageData(img,300,300);
+    ctx.clearRect(0,0,500,500); */
+
+    var drawingBoard = {
+      mycanvas:document.getElementById("mycanvas"),
+      ctx:document.getElementById("mycanvas").getContext("2d"),
+      colorchange:document.getElementById("colorchange"),
+      lineW:document.getElementById("lineW"),
+      bool:false,
+      imgArr:[],
+      init:function(){
+        /* console.log(this.mycanvas) */
+        this.ctx.lineCap = "round";//线条的起始和结尾的样式
+        this.ctx.lineJoin = "round";//线条的拐弯的样式
+        this.drawing()//绘画函数
+        this.btnsAll()
+      },
+      btnsAll:function(){
+        var self = this;
+        this.colorchange.onchange = function(){
+          self.ctx.strokeStyle = this.value;
+        }
+        this.lineW.onchange = function () { 
+          self.ctx.lineWidth = this.value;
+         }
+         var btnsUI = document.getElementsByTagName("ul")[0];
+         btnsUI.onclick = function(e){
+           console.log(e.target.id);
+           //target是当前鼠标点击的那个元素，type是触发的什么类型
+          switch(e.target.id){
+            case "clear":
+            self.ctx.clearRect(0,0,mycanvas.offsetWidth,mycanvas.offsetHeight)
+              break;
+            case "eraser":
+              self.ctx.strokeStyle = "#fff";
+              break;
+            case "rescind":
+              //pop() 方法用于删除并返回数组的最后一个元素。
+              if(self.imgArr.length > 0 ){
+                self.ctx.putImageData(self.imgArr.pop(),0,0);
+              }
+              break;
+          }
+         }
+
+
+      },
+      drawing:function(){
+        var self = this;
+        var canvas = this.mycanvas;
+        //obj.offsetTop 指 obj 距离上方或上层控件的位置
+        var c_left = canvas.offsetLeft;
+        var c_top = canvas.offsetTop;
+        this.mycanvas.onmousedown = function(e){
+          self.bool = true;
+          self.ctx.beginPath();
+          //e.pageX是相对浏览器的边框
+          self.ctx.moveTo(e.pageX-c_left , e.pageY-c_top);
+          //把每次画的保存在数组，getImageData（）获取画的图形数据
+          var imgData = self.ctx.getImageData(0,0,mycanvas.offsetWidth,mycanvas.offsetHeight);
+          self.imgArr.push(imgData);
+
+
+          this.onmousemove = function(e){
+            if(self.bool){
+              self.ctx.lineTo(e.pageX-c_left , e.pageY-c_top);
+              self.ctx.stroke();
+            }
+            this.onmouseup =function(e){
+              self.ctx.closePath();
+              this.onmousemove = null;
+            }
+            this.onmouseleave = function(){
+              self.ctx.closePath();
+              this.onmousemove = null;
+            }
+          }
+          
+        }
+      }
+    }
+    drawingBoard.init();
+
+  </script>
+</body>
+</html>

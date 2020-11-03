@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>动态时钟</title>
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body>
+  <div class="wrapper">
+    <div class="column">
+      <div>0</div>
+      <div>1</div>
+      <div>2</div>
+    </div>
+    <div class="column ten"></div>
+    <div class="coln">:</div>
+    <div class="column six" ></div>
+    <div class="column ten" ></div>
+    <div class="coln">:</div>
+    <div class="column six" ></div>
+    <div class="column ten"></div>
+  </div>
+  
+</body>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.0/jquery.js"></script>
+<script>
+  //new Data() 
+  //时间与每一列的结构一一对应   当前时间居中显示
+  //数字的显示   由opacity决定   通过设置class
+
+  function Index(dom,user24Hours){
+    this.createDom();
+    this.user24Hours = user24Hours;
+    //Array.from()方法就是将一个类数组对象或者可遍历对象转换成一个真正的数组。
+    this.column = Array.from(dom);
+    this.start();
+
+  }
+
+  Index.prototype.start = function(){
+    var self = this;
+    setInterval(function(){
+      var c = self.getClock();
+      console.log(c);
+      self.column.forEach(function(ele,index){
+        var n = c[index];
+        var offset = n * 60;
+        $(ele).css({
+          "transform":"translateY(calc(50vh - "+ offset + "px - 18px))",
+        })
+      })
+    },200);
+  }
+
+  //获得当前时间并处理时间格式
+  Index.prototype.getClock = function () {  
+      var d = new Date();
+      //reduce是累加
+      return [this.user24Hours ? d.getHours() : d.getHours() % 12 || 12,d.getMinutes(),d.getSeconds()].reduce(function(p,n){
+        /* slice(-2)取倒数二个 */
+        return p + ("0" + n).slice(-2);
+      },"")
+  }
+
+  //动态生成dom结构
+  Index.prototype.createDom = function (){
+      for(var i = 0; i < 6 ;i++){
+        var odiv = "<div>" + i + "</div>";
+        $(".six").append(odiv);
+      }
+      for(var i = 0; i < 10 ;i++){
+        var idiv = "<div>" + i + "</div>";
+        $(".ten").append(idiv);
+      }
+      
+  }
+
+  new Index($(".column"),true);
+
+
+</script>
+</html>

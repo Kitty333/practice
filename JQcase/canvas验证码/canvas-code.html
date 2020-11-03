@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>canvas验证码登录框</title>
+  <link rel="stylesheet" href="canvas-code.css">
+</head>
+<body>
+  <div class="wrapper">
+    <div class="inputBox">
+      <input type="text" placeholder="请输入验证码">
+      <span></span>
+    </div>
+    <p class="error">验证码错误</p>
+    <div class="canvasBox">
+      <div class="imgBox"> 
+        <canvas id="myCanvas" width="300" height="80"></canvas>
+      </div>
+      <input type="button" class="refresh">
+    </div>
+    <input type="button" class="submit" value="submit">
+  </div>
+  <div>
+    <p>在div的css样式中使用cursor:pointer，却发现仅在空白处（padding）能显示手的形状</p>
+    <p>解决办法：添加z-index:1</p>
+  </div>
+</body>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.0/jquery.js"></script>
+<script>
+  /* 随机生成字符串   从大小写英文字母及数字之间选取 */
+  var arr = [0,1,2,3,4,5,6,7,8,9];
+  for(var i = 65 ; i <122 ; i++){
+    if(i > 90 && i < 97){
+      continue;
+    }
+    //数字转成字母String.fromCharCode(i)
+    arr.push(String.fromCharCode(i));
+  }
+  var value;
+  function createCanvas(){
+    //选取要显示的字符
+    var canvasStr = "";
+    value = "";
+    for(var i = 0; i<6 ; i++){
+      var a = arr[Math.floor(Math.random()*(arr.length))];
+      canvasStr += a + " ";
+      value += a;
+    }
+    //生成验证码
+    var myCanvas = document.getElementById("myCanvas");
+    var ctx = myCanvas.getContext("2d");
+    var img = new Image();
+    img.src = "./img/1.jpg";
+    img.onload = function () {
+      //引入图片，是否重复，srepeat
+      var pattern = ctx.createPattern(img,"repeat");
+      ctx.fillStyle = pattern;
+      ctx.fillRect(0,0,myCanvas.width,80);
+      ctx.textAlign = "center"
+      ctx.fillStyle = "#ccc"
+      ctx.font ="46px Roboto Slab";
+      //setTransform(a,b,c,d,e,f)，旋转，水平倾斜，垂直倾斜，垂直缩放，水平移动，垂直移动
+      ctx.setTransform(1,-0.1,0.18,1,0,12);
+      ctx.fillText(canvasStr,myCanvas.width/2,60);
+      
+    }
+  }
+  createCanvas();
+
+  $(".submit").on("click",function() {
+    showResule();
+  });
+  $(".refresh").click(function(){
+    createCanvas();
+  });
+  function showResule() {
+    var inputVal = $(".inputBox input").val();
+    if(value == inputVal){
+      $(".inputBox span").css({
+        background:"rgb(0,255,0)",
+        display:"inline-block"
+      })
+      $(".error").css("display","none")
+      createCanvas();
+    }else{
+      $(".inputBox span").css({
+        background:"rgb(255,0,0)",
+        display:"inline-block"
+      })
+      $(".error").css("display","block").html("错错错")
+      createCanvas();
+    }
+  }
+</script>
+</html>

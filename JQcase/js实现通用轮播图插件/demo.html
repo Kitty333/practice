@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>js实现通用轮播插件</title>
+</head>
+<style>
+  /* border是占据空间，如果outline是不占据空间的 */
+  #banner{
+    width: 500px;
+    height: 500px;
+    outline: 3px solid black;
+    margin: 0 auto;
+  }
+</style>
+<body>
+  <div id="banner"></div>
+</body>
+  
+<script>
+
+  var bannerDiv = document.getElementById("banner");
+  createBannerArea(bannerDiv,[
+    {imgUrl:"img/1.jpg",link:"www.taobao.com"},
+    {imgUrl:"img/2.jpg",link:"www.taobao.com"},
+    {imgUrl:"img/3.jpg",link:"www.taobao.com"}
+  ])
+
+/*   areaDom：轮播图区域，是一个dom元素，options是轮播图配置 */
+  function createBannerArea(areaDom,options){
+    var imgArea = document.createElement("div");//图片区域div
+    var numberArea = document.createElement("div");//角标区域div
+    var curIndex =1;//当前显示的第几张图片
+    var changeTimer = null;//自动切换的计时器
+    var timer = null;//动画计时器
+
+    //创建一个区域，用于显示图片
+    initImgs();
+
+    //创建一个区域，用于显示角标
+    initNumbers();
+
+    //设置状态
+    setStatus();
+
+    //初始化角标区域
+    function initNumbers(){
+      numberArea.style.textAlign = "center";
+      numberArea.style.marginTop = "-25px"
+      for(var i = 0 ; i < options.length ; i++){
+        var sp = document.createElement("span");
+        sp.style.display = "inline-block";
+        sp.style.width = "12px";
+        sp.style.height = "12px";
+        sp.style.margin = "0px 7px";
+        sp.style.background = "lightgray";
+        sp.style.borderRadius = "50%";
+        sp.style.cursor = "pointer";
+        //js没有快作用域，需要var改成let，或者立即执行函数
+        (function(index){
+          sp.addEventListener("click",function(){
+          curIndex = index;
+          setStatus();
+        })
+        })(i)
+
+        
+        //appendChild是DOM方法，append是jQuery方法。
+        numberArea.appendChild(sp);
+      }
+      areaDom.appendChild(numberArea);
+
+    }
+    
+    //初始化图片区域
+    function initImgs(){
+        imgArea.style.width = "100%";
+        imgArea.style.height = "100%";
+        imgArea.style.display = "flex";
+        imgArea.style.overflow = "hidden"; 
+        for(let i = 0 ; i < options.length ; i++){
+          var obj = options[i];
+          var img = document.createElement("img");
+          img.src = obj.imgUrl;
+          img.style.width = "100%";
+          img.style.height = "100%";
+          img.style.marginLeft = "0";
+          //点击图片跳转页面
+          img.addEventListener("click",function(){
+            location.href = options[i].link;
+          })
+          imgArea.appendChild(img);
+        }
+        areaDom.appendChild(imgArea);
+        //鼠标指向图片不自动轮播，离开自动轮播
+        imgArea.addEventListener("mouseenter",function(){
+          clearInterval(changeTimer);
+          changeTimer = null;
+        })
+        imgArea.addEventListener("mouseleave",function () {
+          autoChange();
+        })
+    }
+
+    //设置角标状态
+    function setStatus(){
+      //设置圆的背景颜色
+      for (let i = 0; i < options.length; i++) {
+        if(i == curIndex){
+          //当前要显示的轮播图，设置背景为选中状态
+          numberArea.children[i].style.background = "#be926f";
+        }else{
+          numberArea.children[i].style.background = "lightgray";
+          //没有显示的轮播图，设置背景为未选中状态
+        }
+        //设置显示图片
+        var start = parseInt(imgArea.children[0].style.marginLeft);
+        var end = curIndex * -100;
+        var dis = end - start;
+        var duration = 500; //完成的动画需要多少时间
+        var speed = dis / duration;
+
+        if(timer){
+          clearInterval(timer);
+        }
+        timer = setInterval(function(){
+          start += (speed * 20);
+          imgArea.children[0].style.marginLeft = start + "%";
+          if(Math.abs(end - start) > 1){
+            imgArea.children[0].style.marginLeft = end + "%";
+            clearInterval(timer);
+          }
+        },20)      
+      }
+    }
+
+    //自动轮播图
+    function autoChange(){
+        if(changeTimer){
+          return;
+        }
+        changeTimer = setInterval(function(){
+          if(curIndex == options.length - 1){
+            curIndex = 0;
+          }else{
+            curIndex ++;
+          }
+          setStatus();
+        },1000)
+    }
+    
+    
+  }
+
+</script>
+</html>

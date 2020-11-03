@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="css3loading.css">
+</head>
+<body>
+  <div>
+    <h2 class="mosterText">
+      Hello<br>You are beautiful!
+    </h2>
+    <h3>thanks</h3>
+  </div>
+  <div class="monster">
+    <div class="eye">
+      <div class="eyeBall"></div>
+    </div>
+    <div class="mouth"></div>
+  </div>
+  <div class="monster blue">
+    <div class="eye">
+      <div class="eyeBall"></div>
+    </div>
+    <div class="mouth"></div>
+  </div>
+  <div class="pageLoading">
+    <div class="monster">
+      <div class="eye">
+        <div class="eyeBall"></div>
+      </div>
+      <div class="mouth"></div>
+    </div>
+    <div class="loading">
+      <div class="bar"></div>
+    </div>
+  </div>
+  <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.0/jquery.js"></script>
+  <script>
+    var per = 0;
+    var time;
+    time = setInterval(function () {
+      per += 1;
+      $(".bar").css("width",per+"%");
+      if(per > 100){
+        $(".pageLoading").addClass("complete");
+        setTimeout(function(){
+          $(".mosterText").html("<h2>hahahaha</h2>");
+        },3000)
+        clearInterval(time);
+      }
+    },30)
+  </script>
+</body>
+</html>
