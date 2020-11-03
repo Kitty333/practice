@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JSON数据渲染</title>
+</head>
+<style>
+ 
+</style>
+<body>
+  <h3>JSON对象渲染</h3>
+  <table border="1" class="tab" width="300">
+    <tr>
+      <th>学号</th>
+      <th>姓名</th>
+      <th>年龄</th>
+    </tr>
+  </table>
+  <h3>JSON数组渲染</h3>
+    <ul class="score">
+    </ul>
+  <h3>复杂表示（对象加数组）</h3>
+  <table border="1" class="tab2" width="300">
+    <tr>
+      <th>学号</th>
+      <th>姓名</th>
+      <th>年龄</th>
+      <th>成绩</th>
+    </tr>
+  </table>
+</body>
+<script src="jq.js"></script>
+<!-- <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.0/jquery.js"></script> -->
+<script>
+  //对象
+    var student = {
+      id:"123",
+      name:"hsn",
+      age:20
+    }
+    console.log(student);
+    $(".tab").append("<tr><td>"+student.id+"</td><td>"
+    +student.name+"</td><td>"+student.age+"</td></tr>")
+    
+    //数组
+    var score = [88,99,100]
+    score.forEach(function(value,index){
+      $(".score").append("<li>"+value+"</li>")
+    })
+
+    //复杂渲染（对象+数组）
+    var students = [
+      {
+        id:"123",
+        name:"hsn",
+        age:20,
+        score:[88,99,100]
+      },
+      {
+        id:"456",
+        name:"hx",
+        age:22,
+        score:[90,55,33]
+      },
+      {
+        id:"789",
+        name:"lql",
+        age:33,
+        score:[77,99,66]
+      },
+    ]
+    for(var i in students){
+      $(".tab2").append("<tr><td>"+students[i].id+"</td><td>"
+      +students[i].name+"</td><td>"+students[i].age+"</td><td>"
+      +students[i].score.join(" ")+"</td></tr>")
+    }
+    
+    
+
+
+
+</script>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ajax请求本地文件</title>
+</head>
+<body>
+  <table border="1" class="students" width="300">
+    <tr>
+      <th>学号</th>
+      <th>姓名</th>
+      <th>年龄</th>
+      <th>成绩</th>
+    </tr>
+  </table>
+  <p>
+    解决跨域问题</br>
+    装插件live server，安装之后点击golive，域名访问为localhost
+  </p>
+</body>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.0/jquery.js"></script>
+<script>
+  $.ajax({
+    type:"get",
+    url:"./student.json",
+  }).then(function(students){
+    for(var i in students){
+      console.log(students[i]);
+      $(".students").append("<tr><td>"+students[i].id+"</td><td>"
+        +students[i].name+"</td><td>"+students[i].age+"</td><td>"
+          +students[i].score.join(" ")+"</td></tr>")
+    }
+  }).catch(function(err){
+    console.log("错错错");
+  })
+
+
+</script>
+</html>
