@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>按钮点击对应信息</title>
+</head>
+<style>
+  .divv{
+    height: 200px;
+    width: 200px;
+    border: 1px solid hotpink;
+  }
+  div:nth-child(1){
+    background-color: chartreuse;
+    color: chocolate;
+    display: none;
+  }
+  div:nth-child(2){
+    background-color: chocolate;
+    color: cornflowerblue;
+    display: none;
+  }
+  div:nth-child(3){
+    background-color: crimson;
+    color: darkcyan;
+    display: none;
+  }
+  .active{
+    background-color: blue;
+  }
+</style>
+<body>
+  <input type="button" class="btn1" value="QQ糖">
+  <input type="button" class="btn1" value="奶茶">
+  <input type="button" class="btn1" value="蛋糕">
+  <div>
+    <div class="divv">QQ糖呀</div>
+    <div class="divv">奶茶呀</div>
+    <div class="divv">蛋糕呀</div>
+  </div>
+</body>
+<script>
+var btn = document.getElementsByTagName("input");
+var div = document.getElementsByClassName("divv");
+for(var i = 0;i < btn.length;i++){
+  (function (n){
+     btn[n].onclick = function (){
+      for(var j = 0;j< btn.length;j++){
+        btn[j].className=""; 
+        div[j].style.display = "none";//如果没有隐藏的话div从一个变成3个
+      } 
+      this.className = "active";
+      div[n].style.display = "block";
+     } 
+  }(i))
+}
+</script>
+</html>

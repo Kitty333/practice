@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>按钮点击实现对应信息</title>
+</head>
+<style>
+  .divv{
+    height: 200px;
+    width: 200px;
+    display: none;
+    background-color: chartreuse;
+    border: 1px solid blue;
+  }
+  .active{
+    background-color: blue;
+  }
+</style>
+<body>
+    <input type="button" class="btn1" value="QQ糖">
+    <input type="button" class="btn1" value="奶茶">
+    <input type="button" class="btn1" value="蛋糕">
+    <div class="divv">QQ糖呀</div>
+    <div class="divv">奶茶呀</div>
+    <div class="divv">蛋糕呀</div>
+</body>
+<script>
+  var btn = document.getElementsByTagName("input");
+  var div = document.getElementsByClassName("divv");
+  for(var i = 0;i < btn.length;i++){
+    (function (n){
+      btn[n].onclick = function (){
+      for(var j = 0;j< btn.length;j++){
+        btn[j].className="";
+        div[j].style.display = "none";
+      }
+      this.className = "active";
+      div[n].style.display = "block";
+    }
+    }(i))
+  }
+</script>
+</html>
